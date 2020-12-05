@@ -1,0 +1,74 @@
+:PRE_MAIN
+
+
+echo #########################################################
+echo #::: To be installed:
+echo #########################################################
+echo - Chocolatey
+echo - Windows Linux Sub-System
+echo - Ubuntu 18.04.1 LTS
+echo #########################################################
+
+:MAIN
+
+cd "%~dp0" 
+%~d0%
+
+SET has_chocolatey=0
+
+IF EXIST "%ProgramFiles(x86)%\chocolatey" (
+	SET has_chocolatey=1
+	REM echo Chocolatey Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\chocolatey" (
+	SET has_chocolatey=1
+	REM echo Chocolatey Exists... 64-Bit
+)
+IF %has_chocolatey% == 0 (
+	echo Installing chocolatey...
+	
+	@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+)
+
+SET has_wsl=0
+
+IF EXIST "%ProgramFiles(x86)%\WSL" (
+	SET has_wsl=1
+	REM echo WSL Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\WSL" (
+	SET has_winrar=1
+	REM echo WSL Exists... 64-Bit
+)
+IF %has_winrar% == 0 (
+	echo Installing Windows Linux Subsystem...
+	
+	choco install wsl -y
+)
+
+SET has_ubuntu=0
+
+IF EXIST "%ProgramFiles(x86)%\ubuntu" (
+	SET has_ubuntu=1
+	REM echo Ubuntu Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\ubuntu" (
+	SET has_ubuntu=1
+	REM echo ubuntu Exists... 64-Bit
+)
+IF %has_ubuntu% == 0 (
+	echo Installing Ubuntu LTS 1804..
+	
+	choco install wsl-ubuntu-1804 -y
+)
+
+
+cmd bash
+
+GOTO :EXIT
+
+	
+	GOTO :MAIN
+	
+:EXIT
+	exit

@@ -1,0 +1,315 @@
+@echo off
+if not "%1" == "max" start /MAX cmd /c %0 max & exit/b
+
+goto check_Permissions
+
+:check_Permissions
+    echo Administrative permissions required. Detecting permissions...	
+    net session >nul 2>&1
+    if %errorLevel% == 0 (
+        echo Success: Administrative permissions confirmed.
+		
+		GOTO :PRE_MAIN
+    ) else (
+        echo Failed: Run as Administrator Right click - Run as Administrator
+		pause
+		exit
+    )
+
+pause
+
+:PRE_MAIN
+
+
+echo #########################################################
+echo #::: To be installed:
+echo #########################################################
+echo - Chocolatey
+echo - Chrome
+echo - Notepad++
+echo - WinRAR
+echo - 7Zip
+echo - VMware Tools
+echo - Telegraf
+echo - Solarwinds Monitoring Agent
+echo - Teamviewer 11
+echo - Installs Node, Git, Yarn and Coffeescript
+echo - Enabled RDP, Autologon, and sets Firewall rules
+echo - Set DNS
+echo - Rename PC
+echo - Join Domain
+echo #########################################################
+
+:MAIN
+
+cd "%~dp0" 
+%~d0%
+
+SET has_chocolatey=0
+
+IF EXIST "%ProgramFiles(x86)%\chocolatey" (
+	SET has_chocolatey=1
+	REM echo Chocolatey Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\chocolatey" (
+	SET has_chocolatey=1
+	REM echo Chocolatey Exists... 64-Bit
+)
+IF %has_chocolatey% == 0 (
+	echo Installing chocolatey...
+	
+	@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+)
+
+SET has_winrar=0
+
+IF EXIST "%ProgramFiles(x86)%\WinRAR" (
+	SET has_winrar=1
+	REM echo WinRAR Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\WinRAR" (
+	SET has_winrar=1
+	REM echo WinRAR Exists... 64-Bit
+)
+IF %has_winrar% == 0 (
+	echo Installing WinRAR...
+	
+	choco install winrar -y --force --params "ALLUSERS=1"
+)
+
+SET has_7zip=0
+
+IF EXIST "%ProgramFiles(x86)%\7zip" (
+	SET has_7zip=1
+	REM echo 7zip Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\7zip" (
+	SET has_7zip=1
+	REM echo 7zip Exists... 64-Bit
+)
+IF %has_7zip% == 0 (
+	echo Installing 7zip...
+	
+	choco install 7zip -y --force --params "ALLUSERS=1"
+)
+
+SET has_chrome=0
+
+IF EXIST "%ProgramFiles(x86)%\chrome" (
+	SET has_chrome=1
+	REM echo chrome Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\chrome" (
+	SET has_chrome=1
+	REM echo chrome Exists... 64-Bit
+)
+IF %has_chrome% == 0 (
+	echo Installing chrome...
+	
+	choco install googlechrome -y --force --params "ALLUSERS=1"
+	
+)
+
+SET has_notepadplusplus=0
+
+IF EXIST "%ProgramFiles(x86)%\notepadplusplus" (
+	SET has_notepadplusplus=1
+	REM echo notepadplusplus Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\notepadplusplus" (
+	SET has_notepadplusplus=1
+	REM echo notepadplusplus Exists... 64-Bit
+)
+IF %has_notepadplusplus% == 0 (
+	echo Installing notepadplusplus...
+	
+	choco install notepadplusplus -y --force --params "ALLUSERS=1"
+)
+
+SET has_graphicsmagik=0
+
+IF EXIST "%ProgramFiles(x86)%\graphicsmagik" (
+	SET has_graphicsmagik=1
+	REM echo graphicsmagik Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\graphicsmagik" (
+	SET has_graphicsmagik=1
+	REM echo graphicsmagik Exists... 64-Bit
+)
+IF %has_graphicsmagik% == 0 (
+	echo Installing graphicsmagik...
+	
+	choco install graphicsmagick --version=1.3.31 -y --force --params "ALLUSERS=1"
+)
+
+SET has_gitforwindows=0
+
+IF EXIST "%ProgramFiles(x86)%\gitforwindows" (
+	SET has_gitforwindows=1
+	REM echo gitforwindows Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\gitforwindows" (
+	SET has_gitforwindows=1
+	REM echo gitforwindows Exists... 64-Bit
+)
+IF %has_gitforwindows% == 0 (
+	echo Installing gitforwindows...
+	
+	choco install git.install -y --force --params "ALLUSERS=1"
+)
+
+SET has_node6=0
+
+IF EXIST "%ProgramFiles(x86)%\node6" (
+	SET has_node6=1
+	REM echo node6 Exists... 32-Bit
+)
+IF EXIST "%ProgramFiles%\node6" (
+	SET has_node6=1
+	REM echo node6 Exists... 64-Bit
+)
+IF %has_node6% == 0 (
+	echo Installing Node...
+	
+	  choco install nodejs-lts --version=6.9.2 -y --force --params "ALLUSERS=1"
+)
+
+SET has_vcredist2017=0
+
+IF EXIST "%ProgramFiles%\vcredist2017" (
+	SET has_vcredist2017=1
+	REM echo CPP RUNTIME Exists... 64-Bit
+)
+IF %has_vcredist2017% == 0 (
+	echo Installing CPP Runtimes...
+	
+	  choco install vcredist2017 -y 
+	  
+	  choco install vcredist2010 -y
+)
+
+SET has_telegraf=0
+
+IF EXIST "%ProgramFiles%\telegraf" (
+	SET has_telegraf=1
+	REM echo Telegraf Exists... 64-Bit
+)
+IF %has_telegraf% == 0 (
+	echo Installing Telegraf...
+	
+     choco install telegraf -y --force --params "ALLUSERS=1"
+)
+
+SET has_teamviewer=0
+
+IF EXIST "%ProgramFiles%\teamviewer" (
+	SET has_teamviewer=1
+	REM echo teamviewer Exists... 64-Bit
+)
+IF %has_teamviewer% == 0 (
+	echo Installing teamviewer...
+	
+     choco install teamviewer --version=11.0.59518.20160619 -y --force --params "ALLUSERS=1"
+)
+
+SET has_solarwinds=0
+
+IF EXIST "%ProgramFiles%\solarwinds" (
+	SET has_solarwinds=1
+	REM echo solarwinds Exists... 64-Bit
+)
+IF %has_solarwinds% == 0 (
+	echo Installing solarwinds monitoring agent...
+	
+     choco install solarwinds-advanced-monitoring-agent -y --force --params "ALLUSERS=1"-
+)
+
+SET has_vmwaretools=0
+
+IF EXIST "%ProgramFiles%\vmwaretools" (
+	SET has_vmwaretools=1
+	REM echo vmwaretools Exists... 64-Bit
+)
+IF %has_vmwaretools% == 0 (
+	echo Installing VMWare Tools...
+	
+     cchoco install vmware-tools -y --force --params "ALLUSERS=1"
+)
+
+
+     ECHO Installing dependencies...
+     REM coffeescript and yarn
+      start cmd /c npm install yarn@1.5.1 -g  
+      start cmd /c npm install coffee-script -g 
+
+REM Administrative tasks
+
+	  ECHO Turning firewall OFF...
+	  REM Turns all firewalls off
+	  netsh advfirewall set  allprofiles state off
+	  
+
+	  ECHO Turning RDP on...
+	  REM Turn RDP on
+	  reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+	  
+	  ECHO Enable Autologon
+	  REM enables Autologin
+	   reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f
+	   reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUsername /t REG_SZ /d administrator /f
+	   reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d Password1234 /f
+	   reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" /v HibernatedEnabled /t REG_DWORD /d 0 /f
+	   reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" /v HiberfileSizePercent/t REG_DWORD /d 0 /f
+	   
+	  ECHO Attaching Network Drive
+	  net use Z: \\SOURCEREMOVED /persistent:yes
+	  
+	  ECHO Installing Inedo Agent...
+	  REM installs monitoring agents
+	  choco install inedo --source URL -y  --force --params "ALLUSERS=1" ##source server removed for example## 
+	  
+	  @Echo Off
+Echo Your current name is %ComputerName%
+
+:AskID
+Set "ID="
+Set /P "ID=Enter your new name: "
+If Not Defined ID (Echo Can not be empty
+    GoTo AskID)
+If /I "%ID%"=="%ComputerName%" Exit /B
+If "%ID:~,1%"=="." (Echo Must not begin with a period
+    GoTo AskID)
+
+
+
+WMIC ComputerSystem Where Name="%ComputerName%" Call Rename "%ID%"
+
+     echo Setting DNS server
+     REM sets DNS name 
+     netsh interface ipv4 set dns "ethernet" static 8.8.8.8
+     netsh interface ipv4 set dns "wi-fi" static 8.8.8.8
+
+     echo Joining domain
+     REM Join local AD 
+
+     powershell.exe -NoProfile -ExecutionPolicy Bypass add-computer –domainname SOURCEREMOVED -Credential AD\adminuser -restart –force -verbose
+	  
+     REM Copy local file structures
+     ECHO Copying required files...
+     robocopy \\SOURCEREMOVED\z\_SETUP\ C:\ /copyall /COPY:DATSO /E /Z /ZB /R:5 /W:5 /TBD /NP /V /MT:16
+
+
+		 		  
+		  
+		  shutdown.exe /r /t 600
+	 
+
+pause
+
+GOTO :EXIT
+
+	
+	GOTO :MAIN
+	
+:EXIT
+	exit
