@@ -268,7 +268,7 @@ REM Administrative tasks
 	  powershell Invoke-WebRequest -Uri 'https://anywhere.webrootcloudav.com/zerol/wsainstall.exe' -OutFile 'c:\temp2\wsainstall.exe'
 	  cd C:\temp2
 	  .\wsainstall.exe /key=KEY1 /silent /S /TargetPath="C:\Program Files\webroot" /TempPath="C:\ProgramData\webroot"
-      rmdir /Q /S "C:\temp2"	  
+          rmdir /Q /S "C:\temp2"	  
 	  
 	  @Echo Off
 	  
@@ -287,7 +287,7 @@ REM Administrative tasks
      powershell Invoke-WebRequest -Uri 'https://anywhere/unzip.ps1' -OutFile 'c:\packages\unzip.ps1' 	 
      powershell Add-ProvisioningPackage -Path "C:\packages\windows10join.ppkg" -ForceInstall
 	 
-	 REM rmdir /Q /S "C:\packages"
+	 rmdir /Q /S "C:\packages"
 
 
 
